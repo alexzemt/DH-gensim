@@ -1,0 +1,49 @@
+#корпус слов из текстового файла
+#импорт файлов по одной строке за раз
+#определить класс
+#определить функцию _iter_()
+#интеративное считавание файла по строке за раз
+#выдает объект корпуса
+#как создать объект корпуса?
+
+#_iter_() из oWCorpus читает строку из файла
+#с помощью simple_preprocess() обрабатывает
+#передалет в dictionary.doc2bow()
+#отличается от класса ReadTxtFiles!
+#в новом классе функция smart_open() из пакета smart_open
+#позволяет читать и открывать большие файлы
+#S3, HDFS, WebHDFS, HTTP
+
+from gensim.utils import simple_preprocess
+from smart_open import smart_open
+import nltk
+nltk.download('stopwords')  # run once
+from nltk.corpus import stopwords
+stop_words = stopwords.words('english')
+class BoWCorpus(object):
+    def __init__(self, path, dictionary):
+        self.filepath = path
+        self.dictionary = dictionary
+    def __iter__(self):
+        global mydict  # OPTIONAL, only if updating the source dictionary.
+        for line in smart_open(self.filepath, encoding='latin'):
+            # tokenize
+            tokenized_list = simple_preprocess(line, deacc=True)
+            # create bag of words
+            bow = self.dictionary.doc2bow(tokenized_list, allow_update=True)
+            # update the source dictionary (OPTIONAL)
+            mydict.merge_with(self.dictionary)
+            # lazy return the BoW
+            yield bow
+# Create the Dictionary
+mydict = corpora.Dictionary()
+# Create the Corpus
+bow_corpus = BoWCorpus('sample.txt', dictionary=mydict)  # memory friendly
+# Print the token_id and count for each line.
+for line in bow_corpus:
+    print(line)
+#> [(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1), (11, 1)]
+#> [(12, 1), (13, 1), (14, 1), (15, 1), (16, 1), (17, 1)]
+#> ... truncated ...
+
+

@@ -1,0 +1,52 @@
+#как сделать словарь из нескольких текстовых файлов?
+#файл считывается построчно
+#используется функция simple_preprocess для обработки одной строки файла
+#файл в память не загружается
+
+#пусть файл -- sample.txt
+from gensim.utils import simple_preprocess
+from smart_open import smart_open
+import os
+# Create gensim dictionary form a single tet file
+dictionary = corpora.Dictionary(simple_preprocess(line, deacc=True) for line in open('sample.txt', encoding='utf-8'))
+
+# Token to Id map
+dictionary.token2id
+
+#> {'according': 35,
+#>  'and': 22,
+#>  'appointment': 23,
+#>  'army': 0,
+#>  'as': 43,
+#>  'at': 24,
+#>   ...
+#> }
+
+#получился словарь из одного текстового файла
+#как прочесть по строке из нескольких файлов?
+#пусть в одном каталоге есть несколько текстовых файлов
+#определяем класс
+#добавляем метод _iter_()
+#_iter_() перебирает все файлы в каталоге и возвращает обработанный список токенов слов 
+
+#ReadTxtFiles -- класс, принимает путь к каталогу
+
+class ReadTxtFiles(object):
+    def __init__(self, dirname):
+        self.dirname = dirname
+    def __iter__(self):
+        for fname in os.listdir(self.dirname):
+            for line in open(os.path.join(self.dirname, fname), encoding='latin'):
+                yield simple_preprocess(line)
+path_to_text_directory = "lsa_sports_food_docs"
+dictionary = corpora.Dictionary(ReadTxtFiles(path_to_text_directory))
+# Token to Id map
+dictionary.token2id
+# {'across': 0,
+#  'activity': 1,
+#  'although': 2,
+#  'and': 3,
+#  'are': 4,
+#  ...
+# }
+

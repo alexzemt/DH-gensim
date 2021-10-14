@@ -1,0 +1,10 @@
+#как сохранить словарь и корпус и загрузить их обратно?
+# Save the Dict and Corpus
+mydict.save('mydict.dict')  # save dict to disk
+corpora.MmCorpus.serialize('bow_corpus.mm', bow_corpus)  # save corpus to disk
+
+# Load them back
+loaded_dict = corpora.Dictionary.load('mydict.dict')
+corpus = corpora.MmCorpus('bow_corpus.mm')
+for line in corpus:
+    print(line)

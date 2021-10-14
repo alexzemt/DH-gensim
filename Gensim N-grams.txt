@@ -1,0 +1,26 @@
+#что такое биграммы и триграммы?
+#пары или тройки слов (французский - язык, революция - планетарная, французская - революция)
+#функция gensim phrases
+#исходный текст передается в построенную модель фраз
+#модель индексируется
+
+dataset = api.load("text8")
+dataset = [wd for wd in dataset]
+dct = corpora.Dictionary(dataset)
+corpus = [dct.doc2bow(line) for line in dataset]
+
+# Build the bigram models
+bigram = gensim.models.phrases.Phrases(dataset, min_count=3, threshold=10)
+
+# Construct bigram
+print(bigram[dataset[0]])
+# ['anarchism', 'originated', 'as', 'a', 'term', 'of', 'abuse', 'first', 'used',
+#  'against', 'early', 'working_class', 'radicals', 'including', 'the', 'diggers',
+#  'of', 'the', 'english', 'revolution', 'and', 'the', 'sans_culottes', 'of', 'the',
+#  'french_revolution', 'whilst',...]
+
+# Build the trigram models
+trigram = gensim.models.phrases.Phrases(bigram[dataset], threshold=10)
+# Construct trigram
+print(trigram[bigram[dataset[0]]])
+
