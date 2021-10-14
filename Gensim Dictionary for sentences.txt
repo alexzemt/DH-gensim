@@ -1,0 +1,72 @@
+#Gensim - библиотека обработки естественного языка наравне с NLTK
+#основные алгоритмы - LDA/LSI (доступны в R)
+ 
+#токены преобразуются в уникальные идентификаторы
+#создать словарь из списка предложений 
+#словарь - corpora.Dictionary()
+#токен - слово, документ - текст (предложение, абзац), корпус - сборник документов
+#информация о порядке слов теряется
+
+#преобразовать каждое предложение в список слов
+
+import gensim
+from gensim import corpora
+from pprint import pprint
+# How to create a dictionary from a list of sentences?
+documents = ["The Saudis are preparing a report that will acknowledge that", 
+             "Saudi journalist Jamal Khashoggi's death was the result of an", 
+             "interrogation that went wrong, one that was intended to lead", 
+             "to his abduction from Turkey, according to two sources."]
+documents_2 = ["One source says the report will likely conclude that", 
+                "the operation was carried out without clearance and", 
+                "transparency and that those involved will be held", 
+                "responsible. One of the sources acknowledged that the", 
+                "report is still being prepared and cautioned that", 
+                "things could change."]
+          
+# Tokenize(split) the sentences into words
+texts = [[text for text in doc.split()] for doc in documents]
+
+# Create dictionary
+dictionary = corpora.Dictionary(texts)
+
+# Get information about the dictionary
+print(dictionary)
+
+#> Dictionary(33 unique tokens: ['Saudis', 'The', 'a', 'acknowledge', 'are']...)
+#34 уникальных токена
+
+# Show the word to id map
+print(dictionary.token2id)
+
+#> {'Saudis': 0, 'The': 1, 'a': 2, 'acknowledge': 3, 'are': 4, 
+#> 'preparing': 5, 'report': 6, 'that': 7, 'will': 8, 'Jamal': 9, 
+#> "Khashoggi's": 10, 'Saudi': 11, 'an': 12, 'death': 13, 
+#> 'journalist': 14, 'of': 15, 'result': 16, 'the': 17, 'was': 18, 
+#> 'intended': 19, 'interrogation': 20, 'lead': 21, 'one': 22, 
+#> 'to': 23, 'went': 24, 'wrong,': 25, 'Turkey,': 26, 'abduction': 27, 
+#> 'according': 28, 'from': 29, 'his': 30, 'sources.': 31, 'two': 32}
+
+#успешно создан объект Dictionary
+
+#новые документы в будущем = обновление словаря 
+documents_2 = ["The intersection graph of paths in trees",
+               "Graph minors IV Widths of trees and well quasi ordering",
+               "Graph minors A survey"]
+texts_2 = [[text for text in doc.split()] for doc in documents_2]
+dictionary.add_documents(texts_2)
+
+# If you check now, the dictionary should have been updated with the new words (tokens).
+print(dictionary)
+#> Dictionary(45 unique tokens: ['Human', 'abc', 'applications', 'computer', 'for']...)
+print(dictionary.token2id)
+
+#> {'Human': 0, 'abc': 1, 'applications': 2, 'computer': 3, 'for': 4, 'interface': 5, 
+#>  'lab': 6, 'machine': 7, 'A': 8, 'of': 9, 'opinion': 10, 'response': 11, 'survey': 12, 
+#>  'system': 13, 'time': 14, 'user': 15, 'EPS': 16, 'The': 17, 'management': 18, 
+#>  'System': 19, 'and': 20, 'engineering': 21, 'human': 22, 'testing': 23, 'Relation': 24, 
+#>  'error': 25, 'measurement': 26, 'perceived': 27, 'to': 28, 'binary': 29, 'generation': 30, 
+#>  'random': 31, 'trees': 32, 'unordered': 33, 'graph': 34, 'in': 35, 'intersection': 36, 
+#>  'paths': 37, 'Graph': 38, 'IV': 39, 'Widths': 40, 'minors': 41, 'ordering': 42, 
+#>  'quasi': 43, 'well': 44}
+
