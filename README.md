@@ -7,5 +7,5 @@
 * Corpora for files
 ### Сохранить и обновить словари и корпуса
 
-* TopicModelling
-* Word2Vec
+#### TopicModelling
+#### Word2Vec
