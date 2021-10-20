@@ -1,0 +1,15 @@
+import pymorphy2
+morph = pymorphy2.MorphAnalyzer()
+with open('combined.txt',  encoding='utf-8') as f:
+    ls = []
+    for line in f:
+        lst = line.split()
+
+        words = []
+        for word in lst:
+            p = morph.parse(word)[0]  # делаем разбор
+            words.append(p.normal_form)
+
+        ls.append(words)
+out = open("filename1.txt", "r+")
+out.write(str(ls))
